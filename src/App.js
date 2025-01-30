@@ -11,7 +11,6 @@ import Settings from './pages/Views/Settings';
 import Users from './pages/Views/Users';
 import Login from './pages/Auth/Login';
 import Profile from './pages/Views/Profile';
-
 function App() {
   return (
     <BrowserRouter>
