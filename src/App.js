@@ -18,10 +18,8 @@ function App() {
         <div className='App'>
           <Routes>
             <Route path="/login" element={<Login/>} />
-          {/* Parent Route (Layout) */}
               <Route element={<PrivateRoute />}>
                 <Route path="/" element={<Nav />}>
-              {/* Child Routes (Rendered in Outlet) */}
                 <Route path="dashboard" element={<Dashboard />} />
                 <Route path="usage-monitor" element={<UsageMonitor />} />
                 <Route path="janitors" element={<Janitors />} />
