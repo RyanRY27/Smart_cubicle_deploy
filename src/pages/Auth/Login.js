@@ -41,7 +41,7 @@ export default function LoginPage() {
             <input
               type="text"
               placeholder="Email/Username"
-              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-white focus:outline-none"
+              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-Icpetgreen focus:outline-none"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
@@ -57,7 +57,7 @@ export default function LoginPage() {
                 type={showPassword ? "text" : "password"}
                 name="password"
                 placeholder="Enter your password"
-                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-white focus:outline-none"
+                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-Icpetgreen focus:outline-none"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
@@ -80,7 +80,7 @@ export default function LoginPage() {
 
           <button
             type="submit"
-            className="w-full bg-Icpetgreen text-white py-2 rounded-lg hover:bg-gray-800 transition duration-300"
+            className="w-1/2 mx-auto block bg-Icpetgreen text-white py-2 rounded-lg hover:bg-gray-800 transition duration-300"
           >
             Log In
           </button>

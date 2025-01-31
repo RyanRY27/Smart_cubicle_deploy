@@ -35,7 +35,7 @@ export default function LoginPage() {
             className="w-[250px] h-[250px] object-contain"
           />
         </div>
-        <form className="mt-6" onSubmit={handleSubmit}>
+        <form className="mt-2" onSubmit={handleSubmit}>
 
           {/*full name*/}
           <div className="mb-4 flex space-x-4">
@@ -44,7 +44,7 @@ export default function LoginPage() {
               <input
                 type="text"
                 placeholder="Full Name"
-                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-white focus:outline-none"
+                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-Icpetgreen focus:outline-none"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 required
@@ -56,7 +56,7 @@ export default function LoginPage() {
               <input
                 type="text"
                 placeholder="Employee ID"
-                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-white focus:outline-none"
+                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-Icpetgreen focus:outline-none"
                 value={additionalField}
                 onChange={(e) => setAdditionalField(e.target.value)}
               />
@@ -69,7 +69,7 @@ export default function LoginPage() {
               <input
                 type="text"
                 placeholder="Email/Username"
-                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-white focus:outline-none"
+                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-Icpetgreen focus:outline-none"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 required
@@ -81,7 +81,7 @@ export default function LoginPage() {
               <input
                 type="text"
                 placeholder="+63"
-                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-white focus:outline-none"
+                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-Icpetgreen focus:outline-none"
                 value={additionalField}
                 onChange={(e) => setAdditionalField(e.target.value)}
               />
@@ -98,7 +98,7 @@ export default function LoginPage() {
                   type={showPassword ? "text" : "password"}
                   name="password"
                   placeholder="Enter your password"
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-white focus:outline-none"
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-Icpetgreen focus:outline-none"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
@@ -123,7 +123,7 @@ export default function LoginPage() {
                   type={showPassword ? "text" : "password"}
                   name=" Confirm Password"
                   placeholder="Enter your password"
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-white focus:outline-none"
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-Icpetgreen focus:outline-none"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
@@ -149,7 +149,7 @@ export default function LoginPage() {
           </div>
         </form>
 
-          <button type="submit" className="text-white w-full mt-4 bg-Icpetgreen py-2 rounded-lg hover:bg-gray-800 transition duration-300">
+          <button type="submit" className="text-white w-1/2 mx-auto block mt-4 bg-Icpetgreen py-2 rounded-lg hover:bg-gray-800 transition duration-300">
             Sign Up
           </button>
         </div>
