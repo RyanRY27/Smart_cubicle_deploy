@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 export default function LoginPage() {
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
-  const [showPassword, setShowPassword] = React.useState(false);
+  //const [showPassword, setShowPassword] = React.useState(false);
   const { login } = useAuth();
 
   const handleSubmit = (e) => {
@@ -13,9 +13,9 @@ export default function LoginPage() {
     login(username, password);
   };
 
-  const togglePassword = () => {
-    setShowPassword((prevState) => !prevState);
-  };
+ // const togglePassword = () => {
+   // setShowPassword((prevState) => !prevState);
+  //};
 
   return (
     <div className="relative flex items-center justify-center min-h-screen p-4 overflow-hidden">
@@ -54,7 +54,8 @@ export default function LoginPage() {
             <div className="relative">
               <input
                 id="password"
-                type={showPassword ? "text" : "password"}
+                //type={showPassword ? "text" : "password"}
+                type="password"
                 name="password"
                 placeholder="Enter your password"
                 className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-Icpetgreen focus:outline-none"
@@ -62,7 +63,7 @@ export default function LoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
-              {password && ( 
+             {/* {password && ( 
                 <button
                   type="button"
                   onClick={togglePassword}
@@ -70,7 +71,7 @@ export default function LoginPage() {
                 >
                   <i className={`fa ${showPassword ? "fa-eye-slash" : "fa-eye"}`} />
                 </button>
-              )}
+              )}*/}
             </div>
           </div>
 
