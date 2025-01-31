@@ -76,7 +76,7 @@ export default function LoginPage() {
           </div>
 
           <div className="text-left mb-2">
-            <a href="#" className="text-sm text-Icpetgreen hover:underline">Forgot Password?</a>
+            <a href="" className="text-sm text-Icpetgreen hover:underline">Forgot Password?</a>
           </div>
 
           <button
