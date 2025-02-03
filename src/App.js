@@ -4,21 +4,7 @@ import Nav from "./Components/Nav";
 import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./Components/Controller/AuthController";
 import PrivateRoute from "./pages/Auth/PrivateRoute";
-import Dashboard from "./pages/Views/Dashboard";
-import UsageMonitor from "./pages/Views/UsageMonitor";
-import Janitors from "./pages/Views/Janitors";
-import Resources from "./pages/Views/Resources";
-import Settings from "./pages/Views/Settings";
-import Users from "./pages/Views/Users";
-import Profile from "./pages/Views/Profile";
-import Login from "./pages/Auth/Login";
-import Signup from "./pages/Auth/Signup";
-import LoginDesktop from "./pages/Auth/desktop/Login";
-import SignupDesktop from "./pages/Auth/desktop/Signup";
-import LoginMobile from "./pages/Auth/mobile/Login";
-import SignupMobile from "./pages/Auth/mobile/Signup";
 import DashboardDesktop from "./pages/Views/desktop/Dashboard";
-
 import UsageMonitorDesktop from "./pages/Views/desktop/UsageMonitor";
 import JanitorsDesktop from "./pages/Views/desktop/Janitors";
 import ResourcesDesktop from "./pages/Views/desktop/Resources";
@@ -32,9 +18,13 @@ import ResourcesMobile from "./pages/Views/mobile/Resources";
 import SettingsMobile from "./pages/Views/mobile/Settings";
 import UsersMobile from "./pages/Views/mobile/Users";
 import ProfileMobile from "./pages/Views/mobile/Profile";
-import ResponsiveDashboard from "./pages/Views/ResponsiveViews/ResponsiveDashboard";
+import ViewController from "./Components/Controller/ViewController"; 
 
-
+// Authentication Pages
+import LoginDesktop from "./pages/Auth/desktop/Login";
+import SignupDesktop from "./pages/Auth/desktop/Signup";
+import LoginMobile from "./pages/Auth/mobile/Login";
+import SignupMobile from "./pages/Auth/mobile/Signup";
 
 function App() {
   return (
@@ -42,43 +32,25 @@ function App() {
       <AuthProvider>
         <div className="App">
           <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/login-desktop" element={<LoginDesktop />} />
-            <Route path="/signup-desktop" element={<SignupDesktop />} />
-            <Route path="/login-mobile" element={<LoginMobile />} />
-            <Route path="/signup-mobile" element={<SignupMobile />} />
+            {/* Authentication Routes using ViewController */}
+            <Route path="/login" element={<ViewController desktopComponent={LoginDesktop} mobileComponent={LoginMobile} />} />
+            <Route path="/signup" element={<ViewController desktopComponent={SignupDesktop} mobileComponent={SignupMobile} />} />
+
+            {/* Private Routes */}
             <Route element={<PrivateRoute />}>
               <Route path="/" element={<Nav />}>
-                <Route path="dashboard" element={<ResponsiveDashboard />} />
-                <Route path="janitors" element={<Janitors />} />
-                <Route path="resources" element={<Resources />} />
-                <Route path="settings" element={<Settings />} />
-                <Route path="users" element={<Users />} />
-                <Route path="user_profile" element={<Profile />} />
-                <Route path="dashboard" element={<Dashboard />} />
-                <Route path="usage-monitor" element={<UsageMonitor />} />
-                <Route path="dashboard-desktop" element={<DashboardDesktop />} />
-                <Route path="usage-monitor-desktop" element={<UsageMonitorDesktop />} />
-                <Route path="janitors-desktop" element={<JanitorsDesktop />} />
-                <Route path="resources-desktop" element={<ResourcesDesktop />} />
-                <Route path="settings-desktop" element={<SettingsDesktop />} />
-                <Route path="users-desktop" element={<UsersDesktop />} />
-                <Route path="profile-desktop" element={<ProfileDesktop />} />
-                <Route path="dashboard-mobile" element={<DashboardMobile />} />
-                <Route path="usage-monitor-mobile" element={<UsageMonitorMobile />} />
-                <Route path="janitors-mobile" element={<JanitorsMobile />} />
-                <Route path="resources-mobile" element={<ResourcesMobile />} />
-                <Route path="settings-mobile" element={<SettingsMobile />} />
-                <Route path="users-mobile" element={<UsersMobile />} />
-                <Route path="profile-mobile" element={<ProfileMobile />} />
-
-                
-                
+                <Route path="dashboard" element={<ViewController desktopComponent={DashboardDesktop} mobileComponent={DashboardMobile} />} />
+                <Route path="usage-monitor" element={<ViewController desktopComponent={UsageMonitorDesktop} mobileComponent={UsageMonitorMobile} />} />
+                <Route path="janitors" element={<ViewController desktopComponent={JanitorsDesktop} mobileComponent={JanitorsMobile} />} />
+                <Route path="resources" element={<ViewController desktopComponent={ResourcesDesktop} mobileComponent={ResourcesMobile} />} />
+                <Route path="settings" element={<ViewController desktopComponent={SettingsDesktop} mobileComponent={SettingsMobile} />} />
+                <Route path="users" element={<ViewController desktopComponent={UsersDesktop} mobileComponent={UsersMobile} />} />
+                <Route path="user_profile" element={<ViewController desktopComponent={ProfileDesktop} mobileComponent={ProfileMobile} />} />
               </Route>
             </Route>
-            <Route path="*" element={<Navigate to="/login" replace />} />
 
+            {/* Redirect to Login for Unknown Routes */}
+            <Route path="*" element={<Navigate to="/login" replace />} />
           </Routes>
         </div>
       </AuthProvider>
