@@ -38,6 +38,7 @@ export default function Dashboard() {
   const dropdownRef = useRef(null);
   const trendsDropdownRef = useRef(null);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [selectedDateInfo, setSelectedDateInfo] = useState(null);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -334,7 +335,7 @@ export default function Dashboard() {
                 plugins={[dayGridPlugin]}
                 initialView="dayGridMonth"
                 height="auto"
-                width="100%" 
+                width="100%"
                 contentHeight="auto"
                 fixedWeekCount={false}
                 headerToolbar={{
@@ -351,7 +352,7 @@ export default function Dashboard() {
                   next: "",
                 }}
                 dayCellContent={(arg) => (
-                  <div className="flex justify-center items-center w-full h-full text-xs md:text-sm lg:text-base text-center"> 
+                  <div className="flex justify-center items-center w-full h-full text-xs md:text-sm lg:text-base text-center">
                     {arg.dayNumberText.trim()}
                   </div>
                 )}
@@ -368,10 +369,7 @@ export default function Dashboard() {
                     titleEl.style.fontSize = "1.2rem";
                   }
                 }}
-               
-                eventDidMount={(info) => {
-                
-                }}
+                eventDidMount={(info) => {}}
               />
             </div>
           </div>
@@ -384,18 +382,11 @@ export default function Dashboard() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <div className="w-5 h-5 bg-blue-500 rounded flex items-center justify-center">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-4 w-4 text-white"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
+                      <input
+                        id="blue-checkbox"
+                        type="checkbox"
+                        className="w-4 h-4 text-blue-600 bg-white border-white rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-white focus:ring-2 dark:bg-gray-white dark:border-white"
+                      />
                     </div>
                     <span>Cleaning Schedule</span>
                   </div>
@@ -406,18 +397,11 @@ export default function Dashboard() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <div className="w-5 h-5 bg-red-500 rounded flex items-center justify-center">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-4 w-4 text-white"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
+                      <input
+                        id="red-checkbox"
+                        type="checkbox"
+                        className="w-4 h-4 text-red-600 bg-white border-red-500 rounded-sm focus:ring-red-500 dark:focus:ring-red-600 dark:ring-offset-white focus:ring-2 dark:bg-white dark:border-white"
+                      />
                     </div>
                     <span>Peak Hours</span>
                   </div>
@@ -428,18 +412,11 @@ export default function Dashboard() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <div className="w-5 h-5 bg-purple-500 rounded flex items-center justify-center">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-4 w-4 text-white"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
+                      <input
+                        id="red-checkbox"
+                        type="checkbox"
+                        className="w-4 h-4 text-purple-600 bg-white border-white rounded-sm focus:ring-purple-500 dark:focus:ring-purple-600 dark:ring-offset-white focus:ring-2 dark:bg-white dark:border-white"
+                      />
                     </div>
                     <span>Resource Restocking</span>
                   </div>
@@ -518,19 +495,21 @@ export default function Dashboard() {
                 <h2 className="text-xl font-bold">Summarized Report</h2>
                 <div className="flex flex-wrap gap-2 items-center">
                   <div className="flex gap-2">
-                    {["Daily", "Weekly", "Monthly"].map((period) => (
-                      <button
-                        key={period}
-                        onClick={() => setPeriod(period)}
-                        className={`px-3 py-1 text-sm rounded-md transition-colors ${
-                          selectedPeriod === period
-                            ? "bg-teal-600 text-white hover:bg-teal-700"
-                            : "border border-gray-300 hover:bg-gray-50"
-                        }`}
-                      >
-                        {period}
-                      </button>
-                    ))}
+                    <div className="flex space-x-0">
+                      {["Daily", "Weekly", "Monthly"].map((period, index) => (
+                        <button
+                          key={period}
+                          onClick={() => setPeriod(period)}
+                          className={`px-3 py-1 text-sm transition-colors ${
+                            selectedPeriod === period
+                              ? "bg-teal-600 text-white hover:bg-teal-800"
+                              : "border border-gray-300 hover:bg-gray-300"
+                          } ${index === 0 ? "rounded-l-md" : index === 2 ? "rounded-r-md" : ""}`}
+                        >
+                          {period}
+                        </button>
+                      ))}
+                    </div>
                   </div>
                   <div className="relative">
                     <button
@@ -624,12 +603,12 @@ export default function Dashboard() {
                   .map((card, index) => (
                     <div
                       key={index}
-                      className="bg-white rounded-lg p-4 shadow-sm border border-gray-200 flex flex-col items-center justify-center"
+                      className="bg-white rounded-lg p-4 shadow-sm border border-gray-200 flex flex-col"
                     >
-                      <div className="text-sm font-bold text-center">
+                      <div className="text-sm font-bold">
                         {card.title}
                       </div>
-                      <div className="flex items-baseline mt-1 justify-center">
+                      <div className="flex items-baseline mt-1">
                         <span className="text-xl font-semibold">
                           {card.values[selectedPeriod]}
                         </span>
