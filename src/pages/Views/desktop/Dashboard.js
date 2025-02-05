@@ -39,33 +39,11 @@ export default function Dashboard() {
   const dropdownRef = useRef(null);
   const trendsDropdownRef = useRef(null);
   const [showDropdown, setShowDropdown] = useState(false);
-  const [showDateCard, setShowDateCard] = useState(false);
-  const [showOtherCards, setShowOtherCards] = useState(true); // New state to control visibility of other cards
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setShowChartDropdown(false);
-      }
-      if (
-        trendsDropdownRef.current &&
-        !trendsDropdownRef.current.contains(event.target)
-      ) {
-        setShowTrendsDropdown(false);
-      }
-      const dateCardElement = document.getElementById("date-card");
-      if (showDateCard && dateCardElement && !dateCardElement.contains(event.target)) {
-        setShowDateCard(false);
-        setShowOtherCards(true); // Show other cards when date card is closed
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [showDateCard]);
-
+  const [showDateCard, setShowDateCard] = useState(() => {
+    return localStorage.getItem("showDateCard") === "true"; 
+  });
+  const [showOtherCards, setShowOtherCards] = useState(!showDateCard); 
+  const today = new Date().getDate();
   const allMetrics = [
     "Usage Peak Hour",
     "Total Cleaning Time",
@@ -81,14 +59,6 @@ export default function Dashboard() {
   const [selectedMetrics, setSelectedMetrics] = useState(() => {
     return JSON.parse(localStorage.getItem("selectedMetrics")) || allMetrics;
   });
-
-  useEffect(() => {
-    localStorage.setItem("selectedPeriod", selectedPeriod);
-  }, [selectedPeriod]);
-
-  useEffect(() => {
-    localStorage.setItem("selectedMetrics", JSON.stringify(selectedMetrics));
-  }, [selectedMetrics]);
 
   const toggleMetric = (item) => {
     setSelectedMetrics((prevMetrics) =>
@@ -331,89 +301,127 @@ export default function Dashboard() {
     },
   };
 
-  const today = new Date().getDate();
+  useEffect(() => {
+   
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowChartDropdown(false);
+      }
+      if (
+        trendsDropdownRef.current &&
+        !trendsDropdownRef.current.contains(event.target)
+      ) {
+        setShowTrendsDropdown(false);
+      }
+      const dateCardElement = document.getElementById("date-card");
+      if (
+        showDateCard &&
+        dateCardElement &&
+        !dateCardElement.contains(event.target)
+      ) {
+        setShowDateCard(false);
+        setShowOtherCards(true); 
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+  
+    localStorage.setItem("selectedMetrics", JSON.stringify(selectedMetrics));
+    localStorage.setItem("showDateCard", showDateCard); 
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showDateCard, selectedPeriod, selectedMetrics]);
+
+  const handleDateClick = () => {
+    setShowDateCard(true);
+    setShowOtherCards(false);
+  };
 
   return (
     <div className="flex flex-col md:flex-row mt-[-15px] ml-[-15px] mr-[-10px] mx-auto">
-    <aside className="w-full md:w-1/4 min-h-screen p-4 flex flex-col">
-      <Card className="bg-white shadow-lg outline outline-gray-200 outline-1 p-4 flex flex-col mt-[-12px]">
-        {/* Calendar */}
-        <div className="flex justify-center items-center">
-
-          <div className="w-full min-w-[300px] max-w-full custom-calendar">
-            <FullCalendar
-              plugins={[dayGridPlugin]}
-              initialView="dayGridMonth"
-              height="auto"
-              width="100%"
-              contentHeight="auto"
-              fixedWeekCount={false}
-              headerToolbar={{
-                start: "title",
-                center: "",
-                end: "prev,next",
-              }}
-              buttonIcons={{
-                prev: "chevron-left",
-                next: "chevron-right",
-              }}
-              buttonText={{
-                prev: "",
-                next: "",
-              }}
-              dayCellContent={(arg) => (
-                <div
-                  className={`flex justify-center items-center w-full h-full text-xs md:text-sm lg:text-base text-center ${arg.dayNumberText.trim() === today.toString() ? 'cursor-pointer text-black' : ''}`}
-                  onClick={() => {
-                    if (arg.dayNumberText.trim() === today.toString()) {
-                      setShowDateCard(true);
-                      setShowOtherCards(false);
-                    }
-                  }}
-                >
-                  {arg.dayNumberText.trim()}
-                </div>
-              )}
-              aspectRatio={1.5}
-              titleFormat={{
-                year: "numeric",
-                month: "long",
-              }}
-              titleRangeSeparator=""
-              viewDidMount={(view) => {
-                const titleEl = document.querySelector(".fc-toolbar-title");
-                if (titleEl) {
-                  titleEl.style.fontWeight = "bold";
-                  titleEl.style.fontSize = "1.2rem";
-                }
-              }}
-              eventDidMount={(info) => {}}
-            />
-          </div>
-        </div>
-        <hr className="w-full border-t border-gray-200 my-4 mt-5" />
-        
-        {/* Reminders Section */}
-        <div className="w-full">
-          <div className="flex flex-col items-start mt-3">
-            <h2 className="text-xl font-bold mb-4">Reminders</h2>
-            <div className="w-full space-y-3">
-              {/* Reminder items remain the same */}
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="w-5 h-5 bg-blue-500 rounded flex items-center justify-center">
-                    <input
-                      id="blue-checkbox"
-                      type="checkbox"
-                      className="w-4 h-4 text-blue-600 bg-white border-white rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-white focus:ring-2 dark:bg-gray-white dark:border-white"
-                    />
+      <aside className="w-full md:w-1/4 min-h-screen p-4 flex flex-col">
+        <Card className="bg-white shadow-lg outline outline-gray-200 outline-1 p-4 flex flex-col mt-[-12px]">
+          {/* Calendar */}
+          <div className="flex justify-center items-center">
+            <div className="w-full min-w-[300px] max-w-full custom-calendar mt-2 mb-2">
+              <FullCalendar
+                plugins={[dayGridPlugin]}
+                initialView="dayGridMonth"
+                height="auto"
+                width="100%"
+                contentHeight="auto"
+                fixedWeekCount={false}
+                headerToolbar={{
+                  start: "title",
+                  center: "",
+                  end: "prev,next",
+                }}
+                buttonIcons={{
+                  prev: "chevron-left",
+                  next: "chevron-right",
+                }}
+                buttonText={{
+                  prev: "",
+                  next: "",
+                }}
+                dayCellContent={(arg) => (
+                  <div
+                    className={`flex justify-center items-center w-full h-full text-xs md:text-sm lg:text-base text-center ${
+                      arg.dayNumberText.trim() === today.toString()
+                        ? "cursor-pointer text-black"
+                        : ""
+                    }`}
+                    onClick={() => {
+                      if (arg.dayNumberText.trim() === today.toString()) {
+                        handleDateClick();
+                      }
+                    }}
+                  >
+                    {arg.dayNumberText.trim()}
                   </div>
-                  <span>Cleaning Schedule</span>
+                )}
+                aspectRatio={1.5}
+                titleFormat={{
+                  year: "numeric",
+                  month: "long",
+                }}
+                titleRangeSeparator=""
+                viewDidMount={(view) => {
+                  const titleEl = document.querySelector(".fc-toolbar-title");
+                  if (titleEl) {
+                    titleEl.style.fontWeight = "bold";
+                    titleEl.style.fontSize = "1.2rem";
+                  }
+                }}
+                eventDidMount={(info) => {}}
+              />
+            </div>
+          </div>
+          <hr className="w-full border-t border-gray-200 my-4 mt-5" />
+
+          {/* Reminders Section */}
+          <div className="w-full">
+            <div className="flex flex-col items-start mt-4 mb-4">
+              <h2 className="text-xl font-bold mb-4">Reminders</h2>
+              <div className="w-full space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="w-5 h-5 bg-blue-500 rounded flex items-center justify-center">
+                      <input
+                        id="blue-checkbox"
+                        type="checkbox"
+                        className="w-4 h-4 text-blue-600 bg-white border-white rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-white focus:ring-2 dark:bg-gray-white dark:border-white"
+                      />
+                    </div>
+                    <span>Cleaning Schedule</span>
+                  </div>
+                  <span className="bg-blue-500 text-white text-xs font-medium w-6 h-6 flex items-center justify-center rounded-full">
+                    5
+                  </span>
                 </div>
-                <span className="bg-blue-500 text-white text-xs font-medium w-6 h-6 flex items-center justify-center rounded-full">
-                  5
-                </span>
-              </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <div className="w-5 h-5 bg-red-500 rounded flex items-center justify-center">
@@ -450,65 +458,67 @@ export default function Dashboard() {
           </div>
           {/* Janitor Schedule */}
           <div className="flex-grow">
-        <div className="flex flex-col items-start mt-6 mb-5">
-          <h2 className="text-xl font-bold mb-4">Janitor Schedule (Today)</h2>
-          <div className="w-full">
-            <table className="w-full">
-              <thead>
-                <tr className="text-left">
-                  <th className="pb-4">Name</th>
-                  <th className="pb-4">Scheduled</th>
-                  <th className="pb-4">Status</th>
-                  <th className="pb-4"></th>
-                </tr>
-              </thead>
-              <tbody>
-                  {[
-                    { time: "8:00 AM", status: "Done", color: "green" },
-                    { time: "11:00 AM", status: "Overdue", color: "red" },
-                    { time: "3:00 PM", status: "Pending", color: "yellow" },
-                    { time: "7:00 PM", status: "Pending", color: "yellow" },
-                  ].map((shift, i) => (
-                    <tr key={i} className="border-b border-gray-100">
-                      <td className="py-3">
-                        <div className="flex items-center gap-2">
-                          <div className="w-8 h-8 rounded-full bg-gray-200">
-                            <img
-                              src="/images/bongbong.jpg"
-                              alt="Jane Doe"
-                              className="w-8 h-8 rounded-full"
-                            />
-                          </div>
-                          <span>Jane Doe</span>
-                        </div>
-                      </td>
-                      <td className="py-3">{shift.time}</td>
-                      <td className="py-3">
-                        <span
-                          className={
-                            shift.status === "Done"
-                              ? "text-green-500"
-                              : shift.status === "Pending"
-                              ? "text-yellow-500"
-                              : "text-red-500"
-                          }
-                        >
-                          {shift.status}
-                        </span>
-                      </td>
-                      <td className="py-3 text-right">⋮</td>
+            <div className="flex flex-col items-start mt-6 mb-5">
+              <h2 className="text-xl font-bold mb-4">
+                Janitor Schedule (Today)
+              </h2>
+              <div className="w-full mt-2">
+                <table className="w-full">
+                  <thead>
+                    <tr className="text-left">
+                      <th className="pb-4">Name</th>
+                      <th className="pb-4">Scheduled</th>
+                      <th className="pb-4">Status</th>
+                      <th className="pb-4"></th>
                     </tr>
-                  ))}
-                </tbody>
-            </table>
+                  </thead>
+                  <tbody>
+                    {[
+                      { time: "8:00 AM", status: "Done", color: "green" },
+                      { time: "11:00 AM", status: "Overdue", color: "red" },
+                      { time: "3:00 PM", status: "Pending", color: "yellow" },
+                      { time: "7:00 PM", status: "Pending", color: "yellow" },
+                    ].map((shift, i) => (
+                      <tr key={i} className="border-b border-gray-100">
+                        <td className="py-3">
+                          <div className="flex items-center gap-2">
+                            <div className="w-8 h-8 rounded-full bg-gray-200">
+                              <img
+                                src="/images/bongbong.jpg"
+                                alt="Jane Doe"
+                                className="w-8 h-8 rounded-full"
+                              />
+                            </div>
+                            <span>Jane Doe</span>
+                          </div>
+                        </td>
+                        <td className="py-3">{shift.time}</td>
+                        <td className="py-3">
+                          <span
+                            className={
+                              shift.status === "Done"
+                                ? "text-green-500"
+                                : shift.status === "Pending"
+                                ? "text-yellow-500"
+                                : "text-red-500"
+                            }
+                          >
+                            {shift.status}
+                          </span>
+                        </td>
+                        <td className="py-3 text-right">⋮</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-    </Card>
-  </aside>
+        </Card>
+      </aside>
 
       {/* Summarized Report */}
-      {showOtherCards && ( // Only show if showOtherCards is true
+      {showOtherCards && (
         <div className="flex-1 p-1 ml-[-5px]">
           <div className="grid grid-cols-1 gap-6">
             <Card className="bg-white shadow-lg outline outline-gray-200 outline-1 p-4">
@@ -526,7 +536,13 @@ export default function Dashboard() {
                               selectedPeriod === period
                                 ? "bg-teal-600 text-white hover:bg-teal-800"
                                 : "border border-gray-300 hover:bg-gray-300"
-                            } ${index === 0 ? "rounded-l-md" : index === 2 ? "rounded-r-md" : ""}`}
+                            } ${
+                              index === 0
+                                ? "rounded-l-md"
+                                : index === 2
+                                ? "rounded-r-md"
+                                : ""
+                            }`}
                           >
                             {period}
                           </button>
@@ -583,7 +599,11 @@ export default function Dashboard() {
                     {
                       id: "Usage Peak Hour",
                       title: "Usage Peak Hours",
-                      values: { Daily: "12:00", Weekly: "2:00", Monthly: "3:00" },
+                      values: {
+                        Daily: "12:00",
+                        Weekly: "2:00",
+                        Monthly: "3:00",
+                      },
                       unit: "PM",
                     },
                     {
@@ -600,7 +620,11 @@ export default function Dashboard() {
                           <span className="text-black">Cleaning</span>
                         </>
                       ),
-                      values: { Daily: "3:00", Weekly: "4:00", Monthly: "2:00" },
+                      values: {
+                        Daily: "3:00",
+                        Weekly: "4:00",
+                        Monthly: "2:00",
+                      },
                       unit: "PM",
                     },
                     {
@@ -617,7 +641,11 @@ export default function Dashboard() {
                           <span className="text-black">Restock</span>
                         </>
                       ),
-                      values: { Daily: "5:00", Weekly: "3:00", Monthly: "1:00" },
+                      values: {
+                        Daily: "5:00",
+                        Weekly: "3:00",
+                        Monthly: "1:00",
+                      },
                       unit: "PM",
                     },
                   ]
@@ -627,14 +655,14 @@ export default function Dashboard() {
                         key={index}
                         className="bg-white rounded-lg p-4 shadow-sm border border-gray-200 flex flex-col"
                       >
-                        <div className="text-sm font-bold">
-                          {card.title}
-                        </div>
+                        <div className="text-sm font-bold">{card.title}</div>
                         <div className="flex items-baseline mt-1">
                           <span className="text-xl font-semibold">
                             {card.values[selectedPeriod]}
                           </span>
-                          <span className="text-gray-500 ml-1">{card.unit}</span>
+                          <span className="text-gray-500 ml-1">
+                            {card.unit}
+                          </span>
                         </div>
                       </div>
                     ))}
@@ -724,7 +752,9 @@ export default function Dashboard() {
                     <div className="relative" ref={trendsDropdownRef}>
                       <button
                         className="p-1 hover:bg-gray-100 rounded-full"
-                        onClick={() => setShowTrendsDropdown(!showTrendsDropdown)}
+                        onClick={() =>
+                          setShowTrendsDropdown(!showTrendsDropdown)
+                        }
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -807,41 +837,45 @@ export default function Dashboard() {
                 </div>
               </div>
             </Card>
-            
-            
           </div>
         </div>
       )}
-      {/* Date Card for Today */}
-        {showDateCard && (
-          <Card className="bg-white shadow-lg outline outline-gray-200 outline-1 p-4 flex-1 relative mt-1 mr-1 ml-[-1px  ]" id="date-card">
-            <button onClick={() => {
-              setShowDateCard(false);
-              setShowOtherCards(true); // Show other cards when date card is closed
-            }} className="text-gray-500 hover:text-gray-800 absolute top-4 right-4">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M10 9.293l-4.646-4.647a1 1 0 00-1.414 1.414L8.586 10l-4.646 4.646a1 1 0 001.414 1.414L10 10.414l4.646 4.646a1 1 0 001.414-1.414L11.414 10l4.646-4.646a1 1 0 00-1.414-1.414L10 9.293z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </button>
-            <div className="flex flex-col mb-4">
-              <h2 className="text-xl font-bold mb-5">Today's Details</h2>
-              <div className="h-auto">
-                <CalendarComponent />
-              </div>
-            </div>
-          </Card>
-        )}
-      
+      {/* Date Card*/}
+      {showDateCard && (
+        <Card
+          className="bg-white shadow-lg outline outline-gray-200 mt-1 outline-1 p-4 flex-1 relative mr-1 ml-[-1px] h-full flex flex-col"
+          id="date-card"
+        >
+          <button
 
-      
+
+            onClick={() => {
+              setShowDateCard(false);
+              setShowOtherCards(true);
+            }}
+            className="text-gray-500 hover:text-gray-800 absolute top-4 right-4 transition-transform transform hover:rotate-180 mt-1 mr-4"
+          > 
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5 size-5 hover:text-red-600 hover:scale-150"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M10 9.293l-4.646-4.647a1 1 0 00-1.414 1.414L8.586 10l-4.646 4.646a1 1 0 001.414 1.414L10 10.414l4.646 4.646a1 1 0 001.414-1.414L11.414 10l4.646-4.646a1 1 0 00-1.414-1.414L10 9.293z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </button>
+          <div className="flex flex-col flex-grow mt-5 mr-5 ml-5">
+            <div className="h-full">
+              <CalendarComponent />
+            </div>
+
+          </div>
+        </Card>
+      )}
     </div>
-  );}
+  );
+}

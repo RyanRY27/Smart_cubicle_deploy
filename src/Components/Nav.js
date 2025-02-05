@@ -79,7 +79,7 @@ export default function Nav() {
     setCollapsed((prev) => !prev);
     setTimeout(() => {
       window.location.reload(); 
-    }, 300); // animation duration
+    }, 300); 
   };
 
   const handleSidebarItemClick = () => {
