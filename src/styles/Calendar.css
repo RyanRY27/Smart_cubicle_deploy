@@ -297,10 +297,7 @@
 .dcalendar .fc-header-toolbar {
   overflow: hidden;
 }
-/* Debugging: Highlight overflowing elements */
-/*.dcalendar .fc, .dcalendar .fc-view, .dcalendar .fc-scroller {
-  outline: 1px solid red; /* Add a red border to identify overflow */
-*/
+
 .dcalendar {
   height: 100%;
   overflow: hidden;
