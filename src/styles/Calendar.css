@@ -1,13 +1,13 @@
-.fc-theme-standard td, 
-.fc-theme-standard th {
+.custom-calendar .fc-theme-standard td,
+.custom-calendar .fc-theme-standard th {
   border: none !important;
 }
 
-.fc-theme-standard .fc-scrollgrid {
+.custom-calendar .fc-theme-standard .fc-scrollgrid {
   border: none !important;
 }
 
-.fc-daygrid-day-frame {
+.custom-calendar .fc-daygrid-day-frame {
   padding: 2px !important;
   height: 35px !important;
   display: flex;
@@ -15,15 +15,15 @@
   justify-content: center;
 }
 
-.fc-daygrid-day-number {
+.custom-calendar .fc-daygrid-day-number {
   font-size: 12px !important; 
   white-space: nowrap;
   text-align: center;
   width: 100%;
 }
 
-
-.fc-prev-button, .fc-next-button {
+.custom-calendar .fc-prev-button,
+.custom-calendar .fc-next-button {
   background-color: white !important;
   border: none !important;
   color: black !important;
@@ -31,39 +31,40 @@
   box-shadow: none !important;
 }
 
-.fc-prev-button:hover, .fc-next-button:hover {
+.custom-calendar .fc-prev-button:hover,
+.custom-calendar .fc-next-button:hover {
   background-color: #f3f3f3 !important;
 }
 
-.fc-prev-button:focus, .fc-next-button:focus,
-.fc-prev-button:active, .fc-next-button:active {
+.custom-calendar .fc-prev-button:focus,
+.custom-calendar .fc-next-button:focus,
+.custom-calendar .fc-prev-button:active,
+.custom-calendar .fc-next-button:active {
   outline: none !important;
   box-shadow: none !important;
   border: none !important;
 }
 
-.fc-day-today {
+.custom-calendar .fc-day-today {
   background-color: #f3f3f3 !important; 
   border-radius: 5px; 
 }
 
-
-.fc .fc-view-harness {
+.custom-calendar .fc .fc-view-harness {
   width: 100% !important;
   min-width: 100%;
   max-width: 100%;
   overflow-x: hidden;
 }
 
-
-.fc .fc-toolbar {
+.custom-calendar .fc .fc-toolbar {
   flex-wrap: wrap;
 }
 
-.fc .fc-toolbar-title {
+.custom-calendar .fc .fc-toolbar-title {
   font-size: 1rem; 
 }
 
-.fc .fc-button {
+.custom-calendar .fc .fc-button {
   font-size: 0.75rem; 
 }
