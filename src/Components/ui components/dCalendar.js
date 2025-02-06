@@ -63,6 +63,11 @@ const CalendarComponent = () => {
           left: "title",
           right: "dayGridMonth,timeGridWeek,timeGridDay,listWeek",
         }}
+        slotDuration="00:15:00" 
+        slotLabelInterval="00:30:00"
+        slotMinTime="07:00:00"
+        slotMaxTime="20:00:00"
+        allDaySlot={true}
         datesSet={(dateInfo) => {
           console.log("View changed:", dateInfo.view.type);
         }}
@@ -86,9 +91,8 @@ const CalendarComponent = () => {
           },
           timeGridWeek: {
             buttonText: "Week",
-            slotMinTime: "07:00:00",
-            slotMaxTime: "20:00:00",
-            allDaySlot: true,
+            slotDuration: "00:15:00", 
+            slotLabelInterval: "01:00:00", 
             dayCellDidMount: renderDayCell,
             dayHeaderContent: ({ date, view }) => {
               const daysOfWeek = [
@@ -147,9 +151,8 @@ const CalendarComponent = () => {
           },
           timeGridDay: {
             buttonText: "Day",
-            slotMinTime: "07:00:00",
-            slotMaxTime: "20:00:00",
-            allDaySlot: true,
+            slotDuration: "00:15:00", 
+            slotLabelInterval: "01:00:00", 
             dayCellDidMount: renderDayCell,
             dayHeaderContent: ({ date, view }) => {
               const daysOfWeek = [
@@ -168,7 +171,6 @@ const CalendarComponent = () => {
                 date.getDate() === today.getDate() &&
                 date.getMonth() === today.getMonth() &&
                 date.getFullYear() === today.getFullYear();
-
               return (
                 <div
                   style={{
@@ -221,28 +223,82 @@ const CalendarComponent = () => {
         eventDrop={handleEventDrop}
         events={[
           {
-            title: "All Day Event",
-            start: new Date().toISOString().split("T")[0],
-          },
-          { title: "Conference", start: "2024-06-10" },
-          { title: "Conference", start: "2025-02-03" },
-          { title: "Birthday Party", start: "2025-02-07" },
-          { title: "Long Event", start: "2025-02-08" },
-          { title: "Repeating Event", start: "2025-02-09" },
-          { title: "Reporting Event", start: "2025-02-10" },
-          {
-            title: "Team Meeting",
+            id: "1",
+            title: "Time to Restock",
+            assignedName: "Low Detergent",
             start: "2025-02-06T11:30:00",
             end: "2025-02-06T12:00:00",
+            classNames: ["black-event-style"], 
           },
-          { title: "Lunch Break", start: "2025-02-06T14:00:00" },
-          { title: "Project Deadline", start: "2025-02-07" },
           {
-            title: "Weekly Review",
+            id: "2",
+            title: "Cleaning Schedule",
+            assignedName: "Jane Smith",
+            start: "2025-02-06T14:00:00",
+            end: "2025-02-06T14:30:00",
+            classNames: ["blue-event-style"], 
+          },
+
+          {
+            id: "3",
+            title: "Cleaning Schedule",
+            assignedName: "Alice Johnson",
+            start: "2025-02-07T10:00:00",
+            classNames: ["blue-event-style"], 
+          },
+          {
+            id: "4",
+            title: "Alert",
+            assignedName: "Peak Hour",
             start: "2025-02-06T10:00:00",
-            end: "2025-02-06T11:00:00",
+            end: "2025-02-06T10:30:00",
+            classNames: ["red-event-style"], 
+          },
+          {
+            id: "5",
+            title: "Alert!",
+            assignedName: "Peak Hour",
+            start: "2025-02-04T08:00:00",
+            end: "2025-02-04T09:30:00", 
+            classNames: ["red-event-style"], 
+          },
+          {
+            id: "6",
+            title: "Time to Restock",
+            assignedName: "Low Bleach",
+            start: "2025-02-06T13:30:00",
+            end: "2025-02-06T14:00:00",
+            classNames: ["black-event-style"], 
           },
         ]}
+        eventContent={(arg) => {
+          const { title, extendedProps, start, end } = arg.event;
+          const assignedName = extendedProps.assignedName || "Unassigned";
+          const startTime = start
+            ? start.toLocaleTimeString([], {
+                hour: "numeric",
+                minute: "2-digit",
+                hour12: true,
+              })
+            : "No Start Time";
+
+          // check if end is present
+          const timeRange = end
+            ? `${startTime} - ${end.toLocaleTimeString([], {
+                hour: "numeric",
+                minute: "2-digit",
+                hour12: true,
+              })}`
+            : startTime;
+
+          return (
+            <div className="custom-event">
+              <div className="event-title">{title}</div>
+              <div className="event-assigned-name">{assignedName}</div>
+              <div className="event-time">{timeRange}</div>
+            </div>
+          );
+        }}
       />
     </div>
   );

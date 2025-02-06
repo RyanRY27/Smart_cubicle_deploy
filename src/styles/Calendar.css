@@ -339,3 +339,144 @@
 .dboardCalendar .fc-timeGridDay-view .fc-daygrid-day-frame {
   background-color: transparent !important;
 }
+
+.dboardCalendar .fc-event {
+  background-color: #F0F4FD !important; 
+  border-left: 4px solid #0044cc !important; 
+  border-radius: 4px;
+  padding: 6px; 
+  border-right: none !important;
+  border-top: none !important;
+  border-bottom: none !important;
+  margin-bottom: 2px !important;
+  font-size: 12px;
+}
+
+
+.dboardCalendar .fc-event.blue-event-style .event-assigned-name {
+  color: #0044CC !important;
+  font-size: 16px;
+  font-weight: bold; 
+}
+.dboardCalendar .fc-event.blue-event-style .event-time {
+  color: #0044CC !important;
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: 10px; 
+}
+
+
+.dboardCalendar .fc-event.blue-event-style .event-title {
+  color: #0044cc !important; 
+  font-size: 13px; 
+  font-weight: 600; 
+}
+
+
+
+
+.dboardCalendar .fc-event.blue-event-style {
+  line-height: 1.2;
+  color: #0044CC; 
+  padding: 4px;
+  overflow: hidden; 
+  text-overflow: ellipsis;
+  white-space: normal;
+  word-wrap: break-word;
+  font-size: 12px;
+}
+.dboardCalendar .fc-event.black-event-style .event-assigned-name {
+  color: #1A141F !important;
+  font-size: 16px;
+  font-weight: bold; 
+}
+
+
+.dboardCalendar .fc-event.black-event-style .event-time {
+  color: #1A141F !important;
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: 10px; 
+}
+
+
+
+/* Style for the event title */
+.dboardCalendar .fc-event.black-event-style .event-title {
+  color: #1A141F !important; 
+  font-size: 13px; 
+  font-weight: 600; 
+}
+
+
+.dboardCalendar .fc-event.black-event-style {
+  background-color: #EFF0F1 !important;
+  border-left: 4px solid #1A141F !important;
+  line-height: 1.2;
+  padding: 4px;
+  overflow: hidden; 
+  text-overflow: ellipsis;
+  white-space: normal;
+  word-wrap: break-word;
+  font-size: 12px;
+
+}
+.dboardCalendar .fc-event.red-event-style {
+  background-color: #FAEEE4 !important;
+  border-left: 4px solid #C41D39 !important;
+  line-height: 1.2;
+  padding: 4px;
+  overflow: hidden; 
+  text-overflow: ellipsis;
+  white-space: normal;
+  word-wrap: break-word;
+  font-size: 12px;
+}
+.dboardCalendar .fc-event.red-event-style .event-title {
+  color: #C41D39 !important; 
+  font-size: 13px; 
+  font-weight: 600; 
+}
+
+.dboardCalendar .fc-event.red-event-style .event-assigned-name {
+  color: #C41D39 !important; 
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.dboardCalendar .fc-event.red-event-style .event-time {
+  color: #C41D39 !important; 
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+
+
+
+.dboardCalendar .fc-timegrid-slot-label-frame {
+  height: 50px; 
+}
+
+
+
+
+.dboardCalendar .fc-timegrid-event-harness {
+  margin-top: -1px; 
+}
+
+
+.dboardCalendar .fc-timegrid-event {
+  border-radius: 4px;
+  background-color: #f0f8ff;
+  border: 1px solid #d3d3d3;
+  padding: 4px;
+  box-sizing: border-box;
+}
+.dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
