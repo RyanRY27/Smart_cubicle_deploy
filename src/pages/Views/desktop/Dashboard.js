@@ -126,7 +126,6 @@ export default function Dashboard() {
         <Card className="bg-white shadow-lg p-4 flex flex-col h-full overflow-y-auto outline outline-gray-200 outline-1">
           {/* Calendar */}
           <div className="flex justify-center items-center mb-4 overflow-y-auto">
-
             <CustomCalendar
               handleDateClick={() => setShowDateCard(true)}
               today={new Date().getDate()}
@@ -234,7 +233,17 @@ export default function Dashboard() {
                     </td>
                     <td className="py-3">{shift.time}</td>
                     <td className="py-3">
-                      <span className={`text-${shift.color}-500`}>
+                      <span
+                        className={
+                          shift.color === "green"
+                            ? "text-green-500"
+                            : shift.color === "red"
+                            ? "text-red-500"
+                            : shift.color === "yellow"
+                            ? "text-yellow-500"
+                            : ""
+                        }
+                      >
                         {shift.status}
                       </span>
                     </td>
@@ -249,7 +258,6 @@ export default function Dashboard() {
 
       {/* Main Content */}
       {showOtherCards && (
-     
         <div className="flex-1 p-1 ml-[-5px]">
           <div className="grid grid-cols-1 gap-6">
             {/* Summarized Report */}
