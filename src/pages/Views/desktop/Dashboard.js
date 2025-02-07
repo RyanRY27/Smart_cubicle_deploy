@@ -22,6 +22,7 @@ import {
   Legend,
 } from "chart.js";
 
+// Register Chart.js components
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -34,6 +35,7 @@ ChartJS.register(
   Legend
 );
 
+// Custom hook for dropdown functionality
 const useDropdown = (initialState) => {
   const [isOpen, setIsOpen] = useState(initialState);
   const ref = useRef(null);
@@ -55,6 +57,7 @@ const useDropdown = (initialState) => {
 };
 
 export default function Dashboard() {
+  // State management
   const [chartType, setChartType] = useState("bar");
   const [trendsChartType, setTrendsChartType] = useState("line");
   const [showDateCard, setShowDateCard] = useState(false);
@@ -72,13 +75,21 @@ export default function Dashboard() {
     "Recommended Resources",
   ]);
 
+  // Dropdown handlers
+  const [
+    showSummarizedDropdown,
+    setShowSummarizedDropdown,
+    summarizedDropdownRef,
+  ] = useDropdown(false);
   const [showChartDropdown, setShowChartDropdown, chartDropdownRef] =
     useDropdown(false);
   const [showTrendsDropdown, setShowTrendsDropdown, trendsDropdownRef] =
     useDropdown(false);
 
+  // Derived state
   const showOtherCards = !showDateCard;
 
+  // Handlers
   const handleReminderChange = (key) => {
     setRemindersChecked((prevState) => ({
       ...prevState,
@@ -94,6 +105,7 @@ export default function Dashboard() {
     );
   };
 
+  // Effects for localStorage persistence
   useEffect(() => {
     const storedShowDateCard = localStorage.getItem("showDateCard") === "true";
     setShowDateCard(storedShowDateCard);
@@ -109,151 +121,139 @@ export default function Dashboard() {
 
   return (
     <div className="flex flex-col md:flex-row mt-[-15px] ml-[-15px] mr-[-10px] mx-auto">
-      <aside className="w-full md:w-1/4 min-h-screen p-4 flex flex-col">
-        {/* Aside Card */}
-        <Card className="bg-white shadow-lg outline outline-gray-200 outline-1 p-4 flex flex-col mt-[-12px]">
+      {/* Sidebar */}
+      <aside className="w-full md:w-1/4 min-h-screen h-full p-4 flex flex-col mt-[-12px]">
+        <Card className="bg-white shadow-lg p-4 flex flex-col h-full overflow-y-auto outline outline-gray-200 outline-1">
           {/* Calendar */}
-          <div className="flex justify-center items-center">
+          <div className="flex justify-center items-center mb-4 overflow-y-auto">
+
             <CustomCalendar
               handleDateClick={() => setShowDateCard(true)}
               today={new Date().getDate()}
             />
           </div>
-          <hr className="w-full border-t border-gray-200 my-4 mt-5" />
-          <div className="w-full">
-            {/* Reminders Section */}
-            <div className="flex flex-col items-start mt-4 mb-4">
-              <h2 className="text-xl font-bold mb-4">Reminders</h2>
-              <div className="w-full space-y-3">
-                {/* Cleaning Schedule */}
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="w-5 h-5 bg-blue-500 rounded flex items-center justify-center">
-                      <input
-                        id="blue-checkbox"
-                        type="checkbox"
-                        checked={remindersChecked.cleaningSchedule}
-                        onChange={() =>
-                          handleReminderChange("cleaningSchedule")
-                        }
-                        className="w-4 h-4 text-blue-600 bg-white border-white rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-white focus:ring-2 dark:bg-white dark:border-white"
-                      />
-                    </div>
-                    <span>Cleaning Schedule</span>
-                  </div>
-                  <span className="bg-blue-500 text-white text-xs font-medium w-6 h-6 flex items-center justify-center rounded-full">
-                    2
-                  </span>
-                </div>
+          <hr className="w-full border-t border-gray-200 my-4 shadow-lg" />
 
-                {/* Peak Hours */}
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="w-5 h-5 bg-red-500 rounded flex items-center justify-center">
-                      <input
-                        id="red-checkbox"
-                        type="checkbox"
-                        checked={remindersChecked.peakHours}
-                        onChange={() => handleReminderChange("peakHours")}
-                        className="w-4 h-4 text-red-600 bg-white border-red-500 rounded-sm focus:ring-red-500 dark:focus:ring-red-600 dark:ring-offset-white focus:ring-2 dark:bg-white dark:border-white"
-                      />
-                    </div>
-                    <span>Peak Hours</span>
+          {/* Reminders Section */}
+          <div className="flex flex-col items-start mt-4 mb-4">
+            <h2 className="text-xl font-bold mb-4">Reminders</h2>
+            <div className="w-full space-y-3">
+              {/* Cleaning Schedule */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-5 h-5 bg-blue-500 rounded flex items-center justify-center">
+                    <input
+                      id="blue-checkbox"
+                      type="checkbox"
+                      checked={remindersChecked.cleaningSchedule}
+                      onChange={() => handleReminderChange("cleaningSchedule")}
+                      className="w-4 h-4 text-blue-600 bg-white border-white rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-white focus:ring-2 dark:bg-white dark:border-white"
+                    />
                   </div>
-                  <span className="bg-red-500 text-white text-xs font-medium w-6 h-6 flex items-center justify-center rounded-full">
-                    2
-                  </span>
+                  <span>Cleaning Schedule</span>
                 </div>
+                <span className="bg-blue-500 text-white text-xs font-medium w-6 h-6 flex items-center justify-center rounded-full">
+                  2
+                </span>
+              </div>
 
-                {/* Resource Restocking */}
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="w-5 h-5 bg-black rounded flex items-center justify-center">
-                      <input
-                        id="black-checkbox"
-                        type="checkbox"
-                        checked={remindersChecked.resourceRestocking}
-                        onChange={() =>
-                          handleReminderChange("resourceRestocking")
-                        }
-                        className="w-4 h-4 text-black bg-white border-white rounded-sm focus:ring-black dark:focus:ring-black dark:ring-offset-white focus:ring-2 dark:bg-white dark:border-white"
-                      />
-                    </div>
-                    <span>Resource Restocking</span>
+              {/* Peak Hours */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-5 h-5 bg-red-500 rounded flex items-center justify-center">
+                    <input
+                      id="red-checkbox"
+                      type="checkbox"
+                      checked={remindersChecked.peakHours}
+                      onChange={() => handleReminderChange("peakHours")}
+                      className="w-4 h-4 text-red-600 bg-white border-red-500 rounded-sm focus:ring-red-500 dark:focus:ring-red-500 dark:ring-offset-white focus:ring-2 dark:bg-white dark:border-white"
+                    />
                   </div>
-                  <span className="bg-black text-white text-xs font-medium w-6 h-6 flex items-center justify-center rounded-full">
-                    2
-                  </span>
+                  <span>Peak Hours</span>
                 </div>
+                <span className="bg-red-500 text-white text-xs font-medium w-6 h-6 flex items-center justify-center rounded-full">
+                  2
+                </span>
+              </div>
+
+              {/* Resource Restocking */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-5 h-5 bg-black rounded flex items-center justify-center">
+                    <input
+                      id="black-checkbox"
+                      type="checkbox"
+                      checked={remindersChecked.resourceRestocking}
+                      onChange={() =>
+                        handleReminderChange("resourceRestocking")
+                      }
+                      className="w-4 h-4 text-black bg-white border-white rounded-sm focus:ring-black dark:focus:ring-black dark:ring-offset-white focus:ring-2 dark:bg-white dark:border-white"
+                    />
+                  </div>
+                  <span>Resource Restocking</span>
+                </div>
+                <span className="bg-black text-white text-xs font-medium w-6 h-6 flex items-center justify-center rounded-full">
+                  2
+                </span>
               </div>
             </div>
           </div>
-          <hr className="w-full border-t border-gray-200 my-4 mt-9" />
+          <hr className="w-full border-t border-gray-200 mt-5 mb-5 shadow-lg" />
+
           {/* Janitor Schedule */}
-          <div className="flex-grow">
-            <div className="flex flex-col items-start mt-6 mb-5">
-              <h2 className="text-xl font-bold mb-4">
-                Janitor Schedule (Today)
-              </h2>
-              <div className="w-full mt-2">
-                <table className="w-full">
-                  <thead>
-                    <tr className="text-left">
-                      <th className="pb-4">Name</th>
-                      <th className="pb-4">Scheduled</th>
-                      <th className="pb-4">Status</th>
-                      <th className="pb-4"></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {[
-                      { time: "8:00 AM", status: "Done", color: "green" },
-                      { time: "11:00 AM", status: "Overdue", color: "red" },
-                      { time: "3:00 PM", status: "Pending", color: "yellow" },
-                      { time: "7:00 PM", status: "Pending", color: "yellow" },
-                    ].map((shift, i) => (
-                      <tr key={i} className="border-b border-gray-100">
-                        <td className="py-3">
-                          <div className="flex items-center gap-2">
-                            <div className="w-8 h-8 rounded-full bg-gray-200">
-                              <img
-                                src="/images/bongbong.jpg"
-                                alt="Jane Doe"
-                                className="w-8 h-8 rounded-full"
-                              />
-                            </div>
-                            <span>Jane Doe</span>
-                          </div>
-                        </td>
-                        <td className="py-3">{shift.time}</td>
-                        <td className="py-3">
-                          <span
-                            className={
-                              shift.status === "Done"
-                                ? "text-green-500"
-                                : shift.status === "Pending"
-                                ? "text-yellow-500"
-                                : "text-red-500"
-                            }
-                          >
-                            {shift.status}
-                          </span>
-                        </td>
-                        <td className="py-3 text-right">⋮</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
+          <div className="flex-grow overflow-y-auto">
+            <h2 className="text-xl font-bold mb-4">Janitor Schedule (Today)</h2>
+            <table className="w-full">
+              <thead>
+                <tr className="text-left">
+                  <th className="pb-4">Name</th>
+                  <th className="pb-4">Scheduled</th>
+                  <th className="pb-4">Status</th>
+                  <th className="pb-4"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { time: "8:00 AM", status: "Done", color: "green" },
+                  { time: "11:00 AM", status: "Overdue", color: "red" },
+                  { time: "3:00 PM", status: "Pending", color: "yellow" },
+                  { time: "7:00 PM", status: "Pending", color: "yellow" },
+                ].map((shift, i) => (
+                  <tr key={i} className="border-b border-gray-100">
+                    <td className="py-3">
+                      <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 rounded-full bg-gray-200">
+                          <img
+                            src="/images/bongbong.jpg"
+                            alt="Jane Doe"
+                            className="w-8 h-8 rounded-full"
+                          />
+                        </div>
+                        <span>Jane Doe</span>
+                      </div>
+                    </td>
+                    <td className="py-3">{shift.time}</td>
+                    <td className="py-3">
+                      <span className={`text-${shift.color}-500`}>
+                        {shift.status}
+                      </span>
+                    </td>
+                    <td className="py-3 text-right">⋮</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </Card>
       </aside>
+
+      {/* Main Content */}
       {showOtherCards && (
+     
         <div className="flex-1 p-1 ml-[-5px]">
           <div className="grid grid-cols-1 gap-6">
             {/* Summarized Report */}
-            <Card>
+            <Card className="bg-white shadow-lg outline outline-gray-200 outline-1 p-4">
               <SummarizedReport
                 selectedPeriod={selectedPeriod}
                 setSelectedPeriod={setPeriod}
@@ -266,31 +266,34 @@ export default function Dashboard() {
                 ]}
                 selectedMetrics={selectedMetrics}
                 toggleMetric={toggleMetric}
-                showDropdown={showChartDropdown}
-                setShowDropdown={setShowChartDropdown}
+                showDropdown={showSummarizedDropdown}
+                setShowDropdown={setShowSummarizedDropdown}
+                dropdownRef={summarizedDropdownRef}
               />
             </Card>
-            {/* Resources Usage */}
+
+            {/* Charts */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Card className="bg-white shadow-lg outline outline-gray-200 outline-1 p-4 flex-1 h-auto md:h-[400px]">
                 <ResourcesUsageChart
-
                   chartType={chartType}
                   setShowChartDropdown={setShowChartDropdown}
                   showChartDropdown={showChartDropdown}
                   setChartType={setChartType}
+                  dropdownRef={chartDropdownRef}
                 />
               </Card>
-              {/* Trends Over Time */}
               <Card className="bg-white shadow-lg outline outline-gray-200 outline-1 p-4 flex-1 h-auto md:h-[400px]">
                 <TrendsOverTimeChart
                   trendsChartType={trendsChartType}
                   setShowTrendsDropdown={setShowTrendsDropdown}
                   showTrendsDropdown={showTrendsDropdown}
                   setTrendsChartType={setTrendsChartType}
+                  dropdownRef={trendsDropdownRef}
                 />
               </Card>
             </div>
+
             {/* Usage Monitoring */}
             <Card className="bg-white shadow-lg outline outline-gray-200 outline-1 p-4 flex-1 h-auto md:h-[400px]">
               <UsageMonitoringChart />
@@ -323,9 +326,7 @@ export default function Dashboard() {
             </svg>
           </button>
           <div className="flex flex-col flex-grow mt-10 mb-5 mr-5 ml-5 dboardCalendar">
-            <div className="h-full">
-              <CalendarComponent remindersChecked={remindersChecked} />
-            </div>
+            <CalendarComponent remindersChecked={remindersChecked} />
           </div>
         </Card>
       )}

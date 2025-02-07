@@ -29,8 +29,9 @@ export default function CustomCalendar({ handleDateClick, today }) {
           <div
             className={`flex justify-center items-center w-full h-full text-xs md:text-sm lg:text-base text-center ${
               arg.dayNumberText.trim() === today.toString()
-                ? "cursor-pointer text-black"
+                ? "cursor-pointer text-black hover:text-red-500 "
                 : ""
+
             }`}
             onClick={() => {
               if (arg.dayNumberText.trim() === today.toString()) {

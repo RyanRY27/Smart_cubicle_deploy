@@ -9,19 +9,27 @@ import {
   chartOptions,
   resourcesChartOptions,
   trendsChartOptions,
-} from "../../../data/ChartData"; 
+} from "../../../data/ChartData";
 
 // Resources Usage Chart Component
-export const ResourcesUsageChart = ({ chartType, setShowChartDropdown, showChartDropdown, setChartType }) => {
+export const ResourcesUsageChart = ({
+  chartType,
+  setShowChartDropdown,
+  showChartDropdown,
+  setChartType,
+  dropdownRef,
+}) => {
   return (
     <div className="flex flex-col space-y-4 h-full">
       {/* Header Section */}
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-bold">Resources Usage</h2>
-        <div className="relative">
+        <div className="relative" ref={dropdownRef}>
+          {" "}
+          {/* Add ref here */}
           <button
-            className="p-1 hover:bg-gray-100 rounded-full"
             onClick={() => setShowChartDropdown(!showChartDropdown)}
+            className="p-2 hover:bg-gray-100 rounded-full"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -39,27 +47,16 @@ export const ResourcesUsageChart = ({ chartType, setShowChartDropdown, showChart
             </svg>
           </button>
           {showChartDropdown && (
-            <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10">
-              <div className="py-1">
-                <button
-                  onClick={() => {
-                    setChartType("line");
-                    setShowChartDropdown(false);
-                  }}
-                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+            <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
+              {["Bar", "Line"].map((type, index) => (
+                <div
+                  key={index}
+                  className="px-4 py-2 hover:bg-gray-100 flex items-center gap-2 cursor-pointer"
+                  onClick={() => setChartType(type.toLowerCase())}
                 >
-                  Line Chart
-                </button>
-                <button
-                  onClick={() => {
-                    setChartType("bar");
-                    setShowChartDropdown(false);
-                  }}
-                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                >
-                  Bar Chart
-                </button>
-              </div>
+                  <span className="text-sm text-gray-700">{type}</span>
+                </div>
+              ))}
             </div>
           )}
         </div>
@@ -68,7 +65,7 @@ export const ResourcesUsageChart = ({ chartType, setShowChartDropdown, showChart
       <div className="w-full h-full flex-grow overflow-hidden">
         {chartType === "bar" ? (
           <Bar
-            data={resourcesChartData(chartType)} 
+            data={resourcesChartData(chartType)}
             options={{
               ...resourcesChartOptions,
               responsive: true,
@@ -77,11 +74,30 @@ export const ResourcesUsageChart = ({ chartType, setShowChartDropdown, showChart
           />
         ) : (
           <Line
-            data={resourcesChartData(chartType)} 
+            data={resourcesChartData(chartType)}
             options={{
               ...resourcesChartOptions,
               responsive: true,
               maintainAspectRatio: false,
+              elements: {
+                point: {
+                  radius: 6, 
+                  hoverRadius: 8, 
+                  hitRadius: 10, 
+                  borderWidth: 2,
+                  fill: true, 
+                  backgroundColor: "transparent",   
+
+
+
+                  borderColor: (context) => {
+                    const chart = context.chart;
+                    const {datasetIndex } = context.dataPoint;
+                    return chart.data.datasets[datasetIndex].borderColor;
+                  },
+                },
+                pointStyle: "circle", 
+              },
             }}
           />
         )}
@@ -91,13 +107,20 @@ export const ResourcesUsageChart = ({ chartType, setShowChartDropdown, showChart
 };
 
 // Trends Over Time Chart Component
-export const TrendsOverTimeChart = ({ trendsChartType, setShowTrendsDropdown, showTrendsDropdown, setTrendsChartType }) => {
+export const TrendsOverTimeChart = ({
+  trendsChartType,
+  setShowTrendsDropdown,
+  showTrendsDropdown,
+  setTrendsChartType,
+  dropdownRef,
+}) => {
   return (
     <div className="flex flex-col space-y-4 h-full">
+
       {/* Header Section */}
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-bold">Trends Over Time</h2>
-        <div className="relative">
+        <div className="relative" ref={dropdownRef}>
           <button
             className="p-1 hover:bg-gray-100 rounded-full"
             onClick={() => setShowTrendsDropdown(!showTrendsDropdown)}
@@ -118,27 +141,16 @@ export const TrendsOverTimeChart = ({ trendsChartType, setShowTrendsDropdown, sh
             </svg>
           </button>
           {showTrendsDropdown && (
-            <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10">
-              <div className="py-1">
-                <button
-                  onClick={() => {
-                    setTrendsChartType("line");
-                    setShowTrendsDropdown(false);
-                  }}
-                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+            <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
+              {["Bar", "Line"].map((type, index) => (
+                <div
+                  key={index}
+                  className="px-4 py-2 hover:bg-gray-100 flex items-center gap-2 cursor-pointer"
+                  onClick={() => setTrendsChartType(type.toLowerCase())}
                 >
-                  Line Chart
-                </button>
-                <button
-                  onClick={() => {
-                    setTrendsChartType("bar");
-                    setShowTrendsDropdown(false);
-                  }}
-                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                >
-                  Bar Chart
-                </button>
-              </div>
+                  <span className="text-sm text-gray-700">{type}</span>
+                </div>
+              ))}
             </div>
           )}
         </div>
@@ -147,7 +159,7 @@ export const TrendsOverTimeChart = ({ trendsChartType, setShowTrendsDropdown, sh
       <div className="w-full h-full flex-grow overflow-hidden">
         {trendsChartType === "bar" ? (
           <Bar
-            data={trendsChartData(trendsChartType)} 
+            data={trendsChartData(trendsChartType)}
             options={{
               ...trendsChartOptions,
               responsive: true,
@@ -161,6 +173,25 @@ export const TrendsOverTimeChart = ({ trendsChartType, setShowTrendsDropdown, sh
               ...trendsChartOptions,
               responsive: true,
               maintainAspectRatio: false,
+              elements: {
+                point: {
+                  radius: 6, 
+                  hoverRadius: 8, 
+                  hitRadius: 10, 
+                  borderWidth: 2,
+                  fill: true, 
+                  backgroundColor: "transparent", 
+
+
+                  borderColor: (context) => {
+                   
+                    const chart = context.chart;
+                    const { datasetIndex } = context.dataPoint;
+                    return chart.data.datasets[datasetIndex].borderColor;
+                  },
+                },
+                pointStyle: "circle", 
+              },
             }}
           />
         )}
@@ -176,12 +207,31 @@ export const UsageMonitoringChart = () => {
       <h2 className="text-xl font-bold mb-5">Usage Monitoring</h2>
       <div className="flex-grow">
         <Line
-          data={usageData} 
+          data={usageData}
           options={{
             ...chartOptions,
             responsive: true,
             maintainAspectRatio: false,
+            elements: {
+              point: {
+                radius: 6, 
+                hoverRadius: 8, 
+                hitRadius: 10, 
+                borderWidth: 2,
+                fill: true, 
+                backgroundColor: "transparent", 
+
+
+                borderColor: (context) => {
+                  
+        
+                },
+              },
+              pointStyle: "circle", 
+            },
           }}
+            
+        
         />
       </div>
     </div>

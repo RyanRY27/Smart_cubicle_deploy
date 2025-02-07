@@ -227,7 +227,7 @@
 }
 
 .dboardCalendar .fc .fc-daygrid-day.fc-day-today {
-  background-color: lightgray !important;
+  background-color: rgba(243, 243, 243, 0.5) !important;
 }
 
 .dboardCalendar .fc .fc-col-header-cell-cushion {

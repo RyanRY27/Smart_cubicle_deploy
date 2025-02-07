@@ -18,13 +18,14 @@ const CalendarComponent = ({ remindersChecked }) => {
   const renderDayCell = (arg) => {
     const today = new Date();
     const cellDate = arg.date;
+    console.log("Rendering day cell:", cellDate);
     if (
       cellDate.getDate() === today.getDate() &&
       cellDate.getMonth() === today.getMonth() &&
       cellDate.getFullYear() === today.getFullYear()
     ) {
       if (arg.view.type !== "timeGridDay") {
-        arg.el.style.backgroundColor = "lightgray";
+        arg.el.style.backgroundColor = "rgba(243, 243, 243, 0.5)";
       } else {
         arg.el.style.backgroundColor = "";
         arg.el.classList.remove("fc-day-today");

@@ -8,9 +8,9 @@ export default function SummarizedReport({
   toggleMetric,
   showDropdown,
   setShowDropdown,
+  dropdownRef, 
 }) {
   return (
-    <div className="bg-white shadow-lg outline outline-gray-200 outline-1 p-4">
       <div className="flex flex-col space-y-4">
         {/* Header Section */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -42,7 +42,7 @@ export default function SummarizedReport({
             </div>
 
             {/* Metrics Dropdown */}
-            <div className="relative">
+            <div className="relative" ref={dropdownRef}> 
               <button
                 onClick={() => setShowDropdown(!showDropdown)}
                 className="p-2 hover:bg-gray-100 rounded-full"
@@ -158,6 +158,5 @@ export default function SummarizedReport({
             ))}
         </div>
       </div>
-    </div>
   );
 }
