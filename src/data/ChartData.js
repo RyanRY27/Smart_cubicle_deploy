@@ -17,11 +17,12 @@ ChartJS.register(
   LinearScale,
   BarElement,
   LineElement,
-  PointElement,
+  PointElement, 
   Filler,
   Title,
   Tooltip,
   Legend
+
 );
 
 // Resources Usage Chart Data
@@ -40,7 +41,7 @@ export const resourcesChartData = (chartType) => ({
       data: [4, 8, 2, 2],
       backgroundColor: chartType === "line" ? "rgba(74, 222, 128, 0.1)" : "rgb(74, 222, 128)",
       borderColor: "rgb(74, 222, 128)",
-      barPercentage: 0.6,
+      barPercentage: 0.8,
     },
   ],
 });

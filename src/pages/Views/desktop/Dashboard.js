@@ -1,14 +1,17 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Card } from "../../../Components/ui components/card";
-import CalendarComponent from "../../../Components/ui components/DBoardComponent.js/dCalendar";
-import CustomCalendar from "../../../Components/ui components/DBoardComponent.js/asideCalendar";
+import React, { useState, useEffect} from "react";
+import { Card } from "../../../Components/utils/card";
+import CalendarComponent from "../../../Components/Calendar/customCalendar";
+import CustomCalendar from "../../../Components/Calendar/asideCalendar";
 import "../../../styles/Calendar.css";
-import SummarizedReport from "../../../Components/ui components/DBoardComponent.js/SummarizedCard";
+import SummarizedReport from "../../../Components/Reports/SummarizedCard";
+import { useDropdown } from "../../../Components/utils/useDropdown";
 import {
   ResourcesUsageChart,
   TrendsOverTimeChart,
   UsageMonitoringChart,
-} from "../../../Components/ui components/DBoardComponent.js/DashboardCharts";
+} from "../../../Components/Charts/DashboardCharts";
+import { toggleMetric } from "../../../Components/utils/metricUtils";
+import { handleReminderChange } from "../../../Components/utils/reminderUtils";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -35,26 +38,6 @@ ChartJS.register(
   Legend
 );
 
-// Custom hook for dropdown functionality
-const useDropdown = (initialState) => {
-  const [isOpen, setIsOpen] = useState(initialState);
-  const ref = useRef(null);
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (ref.current && !ref.current.contains(event.target)) {
-        setIsOpen(false);
-      }
-    };
-
-    document.addEventListener("pointerdown", handleClickOutside);
-    return () => {
-      document.removeEventListener("pointerdown", handleClickOutside);
-    };
-  }, []);
-
-  return [isOpen, setIsOpen, ref];
-};
 
 export default function Dashboard() {
   // State management
@@ -89,22 +72,16 @@ export default function Dashboard() {
   // Derived state
   const showOtherCards = !showDateCard;
 
-  // Handlers
-  const handleReminderChange = (key) => {
-    setRemindersChecked((prevState) => ({
-      ...prevState,
-      [key]: !prevState[key],
-    }));
-  };
+ 
 
-  const toggleMetric = (item) => {
-    setSelectedMetrics((prevMetrics) =>
-      prevMetrics.includes(item)
-        ? prevMetrics.filter((metric) => metric !== item)
-        : [...prevMetrics, item]
-    );
+  // Inside the Dashboard component
+  const handleReminderChangeWrapper = (key) => {
+    handleReminderChange(setRemindersChecked, key);
   };
-
+  
+  const toggleMetricWrapper = (item) => {
+    toggleMetric(setSelectedMetrics, item);
+  };
   // Effects for localStorage persistence
   useEffect(() => {
     const storedShowDateCard = localStorage.getItem("showDateCard") === "true";
@@ -127,6 +104,7 @@ export default function Dashboard() {
           {/* Calendar */}
           <div className="flex justify-center items-center mb-4 overflow-y-auto">
             <CustomCalendar
+
               handleDateClick={() => setShowDateCard(true)}
               today={new Date().getDate()}
             />
@@ -145,7 +123,7 @@ export default function Dashboard() {
                       id="blue-checkbox"
                       type="checkbox"
                       checked={remindersChecked.cleaningSchedule}
-                      onChange={() => handleReminderChange("cleaningSchedule")}
+                      onChange={() => handleReminderChangeWrapper("cleaningSchedule")}
                       className="w-4 h-4 text-blue-600 bg-white border-white rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-white focus:ring-2 dark:bg-white dark:border-white"
                     />
                   </div>
@@ -164,7 +142,7 @@ export default function Dashboard() {
                       id="red-checkbox"
                       type="checkbox"
                       checked={remindersChecked.peakHours}
-                      onChange={() => handleReminderChange("peakHours")}
+                      onChange={() => handleReminderChangeWrapper("peakHours")}
                       className="w-4 h-4 text-red-600 bg-white border-red-500 rounded-sm focus:ring-red-500 dark:focus:ring-red-500 dark:ring-offset-white focus:ring-2 dark:bg-white dark:border-white"
                     />
                   </div>
@@ -184,7 +162,7 @@ export default function Dashboard() {
                       type="checkbox"
                       checked={remindersChecked.resourceRestocking}
                       onChange={() =>
-                        handleReminderChange("resourceRestocking")
+                        handleReminderChangeWrapper("resourceRestocking")
                       }
                       className="w-4 h-4 text-black bg-white border-white rounded-sm focus:ring-black dark:focus:ring-black dark:ring-offset-white focus:ring-2 dark:bg-white dark:border-white"
                     />
@@ -271,9 +249,9 @@ export default function Dashboard() {
                   "Recommended Cleaning Time",
                   "Total Resources Restocked",
                   "Recommended Resources",
-                ]}
+                ]} 
                 selectedMetrics={selectedMetrics}
-                toggleMetric={toggleMetric}
+                toggleMetric={toggleMetricWrapper}
                 showDropdown={showSummarizedDropdown}
                 setShowDropdown={setShowSummarizedDropdown}
                 dropdownRef={summarizedDropdownRef}
@@ -304,6 +282,7 @@ export default function Dashboard() {
 
             {/* Usage Monitoring */}
             <Card className="bg-white shadow-lg outline outline-gray-200 outline-1 p-4 flex-1 h-auto md:h-[400px]">
+            
               <UsageMonitoringChart />
             </Card>
           </div>
