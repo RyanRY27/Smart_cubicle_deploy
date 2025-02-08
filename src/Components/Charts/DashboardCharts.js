@@ -219,13 +219,14 @@ export const TrendsOverTimeChart = ({
 };
 
 // Usage Monitoring Chart Component
-export const UsageMonitoringChart = () => {
+export const UsageMonitoringChart = ({ showHeading = true }) =>  {
   return (
     <div className="flex flex-col mb-4 h-full">
-      <h2 className="text-xl font-bold mb-5">Usage Monitoring</h2>
+     {showHeading && <h2 className="text-xl font-bold mb-5">Usage Monitoring</h2>}
       <div className="flex-grow">
         <Line
           data={usageData}
+
           options={{
             ...chartOptions,
             responsive: true,
