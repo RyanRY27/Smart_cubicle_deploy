@@ -639,6 +639,44 @@ td.fc-list-event-graphic {
 }
 
 
+.dboardCalendar .fc-daygrid-day-events {
+  max-height: 100px;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.dboardCalendar .fc-daygrid-day-events::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.dboardCalendar .fc-daygrid-day-events:hover {
+  scrollbar-width: thin;
+  scrollbar-color: gray #f1f1f1;
+}
+
+.dboardCalendar .fc-daygrid-day-events:hover::-webkit-scrollbar {
+  width: 8px;
+}
+
+.dboardCalendar .fc-daygrid-day-events:hover::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 15px;
+}
+
+.dboardCalendar .fc-daygrid-day-events:hover::-webkit-scrollbar-thumb {
+  background: #4a90e2;
+  border-radius: 10px;
+  border: 2px solid #f1f1f1;
+}
+
+.dboardCalendar .fc-daygrid-day-events:hover::-webkit-scrollbar-thumb:hover {
+  background: #357ab8;
+}
+
+.dboardCalendar .fc-daygrid-day-events:hover::-webkit-scrollbar-thumb:active {
+  background: #2a6496;
+}
 
 
 .mobileCalendar .fc-button {
